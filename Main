@@ -1,0 +1,57 @@
+process = [[0, 3, 'A'], [2, 6, 'B'], [4, 4, 'C'], [6, 5, 'D'], [8, 2, 'E']]
+procCopy = process[:]
+
+time = 0
+FinishTime = 0
+waitTime = 0
+
+print("Choose which algorithm: ")
+print("1 for FCFS: ")
+print("2 for SPN: ")
+print("3 for SRT: ")
+
+userIn = input()
+print(" ")
+
+print ("{:<7}  {:<10}  {:<10}  {:<9}  {:<10}  {:<8}  {:<15}".format("Process",  "ArrivalTime",  "ServiceTime",  "StartTime",  "FinishTime",  "WaitTime",  "TurnaroundTime"))
+
+if(userIn == "1"):
+    for values in process:
+        FinishTime = time + values[1]
+        waitTime = time - values[0]
+        TurnaroundTime = FinishTime - values[0]
+        print("{:<7}   {:<10}   {:<10}   {:<9}  {:<10}  {:<8}  {:<15}".format(values[2], values[0], values[1], time, FinishTime, waitTime, TurnaroundTime))
+        time += values[1]
+        
+elif(userIn == "2"):
+    que = []
+    for values in process:
+        if(len(que) == 0):
+            FinishTime = time + values[1]
+            waitTime = time - values[0]
+            TurnaroundTime = FinishTime - values[0]
+            print("{:<7}   {:<10}   {:<10}   {:<9}  {:<10}  {:<8}  {:<15}".format(values[2], values[0], values[1], time, FinishTime, waitTime, TurnaroundTime))
+            procCopy.remove(values)
+            time += values[1]
+            for vals in procCopy:
+                if(vals[0] < FinishTime and que.count(vals) == 0 and vals[2] != values[2]):
+                    que.append(vals)
+        else:
+            
+            item = min(que, key=lambda x: x[1])
+            FinishTime = time + item[1]
+            waitTime = time - item[0]
+            TurnaroundTime = FinishTime - item[0]
+            print("{:<7}   {:<10}   {:<10}   {:<9}  {:<10}  {:<8}  {:<15}".format(item[2], item[0], item[1], time, FinishTime, waitTime, TurnaroundTime))
+            time += item[1]
+            procCopy.remove(values)
+            for vals in procCopy:
+                if(vals[0] < FinishTime and que.count(vals) <= 0):
+                    que.append(vals)
+            que.remove(item)
+            if(procCopy.count(item) >= 1):
+                procCopy.remove(item)
+            'print(values[2], item[2] , procCopy,  "que: ", que)'
+            
+else:
+    
